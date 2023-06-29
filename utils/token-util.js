@@ -5,6 +5,7 @@ export function generateToken(id) {
     const token = jwt.sign({ id: id }, SECRET_JWT_SEED, {
         expiresIn: 60 * 60 * 24, // expires in 24 hours
     });
+    console.log(token)
     return token
 }
 export async function verifyToken(req, res, next) {
