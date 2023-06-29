@@ -9,6 +9,9 @@ import authRoutes from './router/auth.routes.js'
 import rolRoutes from './router/rol.routes.js'
 import formRoutes from './router/formulario.routes.js'
 import userRoutes from './router/usuario.routes.js'
+import { config } from 'dotenv'
+
+console.log('Config', config())
 
 const app = express();
 
