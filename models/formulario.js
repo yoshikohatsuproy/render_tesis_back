@@ -15,6 +15,26 @@ Formulario.init(
         }
       },
     },
+    iconForm: {
+      type: DataTypes.STRING,
+      allowNull: false,
+      validate: {
+        isAlpha: { args: true, msg: "El icono solo puede contener letras" },
+        len: {
+            args: [3, 100], msg: "El icono tiene que ser entre 3 y 100 caracteres"
+        }
+      },
+    },
+    routeForm: {
+      type: DataTypes.STRING,
+      allowNull: false,
+      validate: {
+        isAlpha: { args: true, msg: "La ruta solo puede contener letras" },
+        len: {
+            args: [3, 100], msg: "La ruta tiene que ser entre 3 y 100 caracteres"
+        }
+      },
+    },
     is_delete: { type: DataTypes.BOOLEAN, defaultValue: false },
     createdBy: { type: DataTypes.STRING, allowNull: false },
     updatedBy: { type: DataTypes.STRING, allowNull: false },

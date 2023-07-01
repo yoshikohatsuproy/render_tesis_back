@@ -15,9 +15,12 @@ import { generateToken } from "../utils/token-util.js";
 export const login = async (req, res) => {
   try {
     const { usuario, password} = req.body;
-    let query = `select * from Usuario u where emailUser ='${usuario}'`
+    let query = `select * from usuario where emailuser ='${usuario}'`
+    console.log(query)
 
     const response = await sequelize.query(query)
+    console.log(response)
+    
     if (response[0].length == 0) {
       return returnJson(
         res,
@@ -63,15 +66,6 @@ export const login = async (req, res) => {
     
   } catch (error) {
     console.log(error);
-    if (error.name == "SequelizeValidationError") {
-      return returnJson(
-        res,
-        error.errors[0].message,
-        404,
-        false,
-        error.errors[0].type
-      );
-    }
     return returnJson(res, messageError, 500, false);
   }
 };

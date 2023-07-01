@@ -19,3 +19,7 @@ export const messageDelete = (cadena) =>{
 export const messageLogin = (usuario) => {
     return `Bienvenido ${usuario}`
 }
+
+export const messageExistByCorreo = ( correo) =>{
+    return `Ya existe un usuario con el correo ${correo} `
+}

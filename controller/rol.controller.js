@@ -6,16 +6,16 @@ import {
   messageUpdate,
 } from "../utils/message-util.js";
 import { returnJson } from "../utils/returnJson.js";
-import { Rol } from "../models/rol.js";
+import { sequelize } from "../database/db.js";
 
 let modelo = "el rol";
 
 export const getAll = async (req, res) => {
   try {
-    const lista = await Rol.findAll( {
-      where : { is_delete : false}
-    });
-    return returnJson(res, `Lista ${modelo}`, 201, true, lista);
+
+    let query = `select * from rol where is_delete = 0`
+    const response = await sequelize.query(query)
+    return returnJson(res, `Lista ${modelo}`, 201, true, response[0]);
   } catch (error) {
     console.log(error);
     return returnJson(res, messageError, 500, false);
@@ -25,11 +25,13 @@ export const getAll = async (req, res) => {
 export const getOne = async (req, res) => {
   try {
     const id = req.params.id;
-    const model = await Rol.findOne({ where: { id: id } });
-    if (model === null) {
-      return returnJson(res, messageExistByFId(modelo, id), 201, true, model);
+    let query = `select * from rol where id = ${id}`
+    const response = await sequelize.query(query)
+
+    if (response[0] === null) {
+      return returnJson(res, messageExistByFId(modelo, id), 404, true  );
     }
-    return returnJson(res, `Lista ${modelo}`, 201, true, model);
+    return returnJson(res, `Lista ${modelo}`, 201, true, response[0]);
   } catch (error) {
     console.log(error);
     return returnJson(res, messageError, 500, false);
@@ -38,20 +40,12 @@ export const getOne = async (req, res) => {
 
 export const create = async (req, res) => {
   try {
-    const { nomRol, createdBy, updatedBy } = req.body;
-    const newModel = await Rol.create({ nomRol, createdBy, updatedBy });
-    return returnJson(res, messageCreate(modelo), 201, true, newModel);
+    const { nomRol, createdBy } = req.body;
+    let query = `insert into rol (nomrol, created_by, updated_by) values('${nomRol}', '${createdBy}', '${createdBy}')`;
+    await sequelize.query(query)
+    return returnJson(res, messageCreate(modelo), 201, true);
   } catch (error) {
     console.log(error);
-    if (error.name == "SequelizeValidationError") {
-      return returnJson(
-        res,
-        error.errors[0].message,
-        404,
-        false,
-        error.errors[0].type
-      );
-    }
     return returnJson(res, messageError, 500, false);
   }
 };
@@ -59,28 +53,21 @@ export const create = async (req, res) => {
 export const update = async (req, res) => {
   try {
     const id = req.params.id;
-    const model = await Rol.findOne({ where: { id: id } });
-    if (model === null) {
-      return returnJson(res, messageExistByFId(modelo, id), 201, true, model);
+
+    let query = `select * from rol where id = ${id}`
+    const response = await sequelize.query(query)
+
+    if (response[0] === null) {
+      return returnJson(res, messageExistByFId(modelo, id), 404, true  );
     }
     const { nomRol, updatedBy } = req.body;
-    model.nomRol = nomRol;
-    model.updatedBy = updatedBy;
-    model.is_delete = 0;
 
-    await model.save();
-    return returnJson(res, messageUpdate(modelo), 201, true, model);
+    query = `update rol set nomrol = '${nomRol}', is_delete = 0, updated_by = '${updatedBy}' where id = ${id}`;
+    await sequelize.query(query)
+
+    return returnJson(res, messageUpdate(modelo), 201, true);
   } catch (error) {
     console.log(error);
-    if (error.name == "SequelizeValidationError") {
-      return returnJson(
-        res,
-        error.errors[0].message,
-        404,
-        false,
-        error.errors[0].type
-      );
-    }
     return returnJson(res, messageError, 500, false);
   }
 };
@@ -88,17 +75,18 @@ export const update = async (req, res) => {
 export const inactive = async (req, res) => {
   try {
     const id = req.params.id;
-    const model = await Rol.findOne({ where: { id: id } });
-    if (model === null) {
-      return returnJson(res, messageExistByFId(modelo, id), 201, true, model);
+    let query = `select * from rol where id = ${id}`
+
+    const response = await sequelize.query(query)
+    if (response[0] === null) {
+      return returnJson(res, messageExistByFId(modelo, id), 404, true  );
     }
+    const {  updatedBy } = req.body;
 
-    const { updatedBy } = req.body;
-    model.updatedBy = updatedBy;
-    model.is_delete = 1;
+    query = `update rol set is_delete = 1, updated_by = '${updatedBy}' where id = ${id}`;
+    await sequelize.query(query)
 
-    await model.save();
-    return returnJson(res, messageDelete(modelo), 201, true, model);
+    return returnJson(res, messageDelete(modelo), 201, true);
   } catch (error) {
     console.log(error);
     return returnJson(res, messageError, 500, false);

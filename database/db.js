@@ -7,8 +7,13 @@ export const sequelize = new Sequelize(
     DB_PASS, {
         host: DB_HOST,
         dialect: "mysql",
-        loggin: console.log
-    }
+        loggin: console.log,
+        dialectOptions: {
+            ssl: {
+                rejectUnauthorized: true,        
+            }
+        }
+    },
 );
 
  
