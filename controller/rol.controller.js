@@ -13,9 +13,9 @@ let modelo = "el rol";
 export const getAll = async (req, res) => {
   try {
 
-    let query = `select * from rol where is_delete = 0`
+    let query = `select id 'rolId', nomrol 'name' from rol where is_delete = 0`
     const response = await sequelize.query(query)
-    return returnJson(res, `Lista ${modelo}`, 201, true, response[0]);
+    return returnJson(res, 201, response[0]);
   } catch (error) {
     console.log(error);
     return returnJson(res, messageError, 500, false);

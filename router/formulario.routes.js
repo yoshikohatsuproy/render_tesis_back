@@ -5,7 +5,7 @@ import { verifyToken } from "../utils/token-util.js";
 const router = express.Router();
 const modulo = "formulario"
 
-router.use(verifyToken)
+//router.use(verifyToken)
 router.get(`/${modulo}`, getAll)
 router.get(`/${modulo}/:id`, getOne)
 router.post(`/${modulo}`, create)

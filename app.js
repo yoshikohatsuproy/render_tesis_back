@@ -1,6 +1,7 @@
 import express from 'express'
 import cors from 'cors'
 import morgan from 'morgan'
+import { corsOptions } from "./config.js";
 
 import './models/asocciations.js'
 
@@ -14,7 +15,7 @@ import userRoutes from './router/usuario.routes.js'
 
 const app = express();
 
-app.use(cors())
+app.use(cors(corsOptions))
 app.use(morgan('dev'))
 app.use(express.urlencoded({extended:false}))
 app.use(express.json())

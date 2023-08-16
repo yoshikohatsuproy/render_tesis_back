@@ -1,4 +1,7 @@
 import { config } from "dotenv";
+ 
+
+const origin =  "http://localhost:5173";
 
 config();
 export const {
@@ -10,3 +13,8 @@ export const {
   DB_NAME,
   SECRET_JWT_SEED,
 } = process.env;
+
+export const corsOptions = {
+  origin: [origin],
+  credentials: true,
+};

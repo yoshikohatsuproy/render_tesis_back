@@ -1,6 +1,6 @@
 import express from "express";
 import {
-  create,
+  create, 
   inactive,
   getAll,
   getOne,
@@ -13,7 +13,7 @@ import { validarCampo } from "../utils/valiidacion-util.js";
 const router = express.Router();
 const modulo = "roles";
 
-router.use(verifyToken)
+//router.use(verifyToken)
 router.get(`/${modulo}`, getAll);
 router.get(`/${modulo}/:id`, getOne);
 router.post(

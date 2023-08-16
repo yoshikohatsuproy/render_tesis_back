@@ -1,3 +1,7 @@
-export function returnJson(res, mensaje, statusCode, ok, data = []){
-    return res.status(statusCode).json({ok, data, mensaje})
+export function returnJson(res, statusCode,  data = []){
+    return res.status(statusCode).json(data)
+}
+
+export function errorJson(res, statusCode){
+    return res.status(statusCode).json({})
 }
